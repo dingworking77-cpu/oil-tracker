@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>บันทึกการเปลี่ยนน้ำมันเครื่อง</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- ปุ่มสลับโหมด -->
+        <button id="themeToggle" class="btn-theme">
+            <i class="fa-solid fa-moon"></i> โหมดมืด/สว่าง
+        </button>
+
+        <h2><i class="fa-solid fa-oil-can"></i> บันทึกการเปลี่ยนน้ำมันเครื่อง</h2>
+
+        <!-- ฟอร์มบันทึก -->
+        <div class="card form-card">
+            <h3><i class="fa-solid fa-pen-to-square"></i> ฟอร์มบันทึก</h3>
+            <form id="oilForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-calendar-days"></i> วันที่เปลี่ยน</label>
+                        <input type="date" id="oilDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-gauge"></i> เลขไมล์ตอนเปลี่ยน</label>
+                        <input type="number" id="currentMileage" placeholder="กรอกเลขไมล์" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-route"></i> ระยะทาง</label>
+                        <select id="distanceInterval" required>
+                            <option value="" disabled selected>เลือกช่วงระยะทาง</option>
+                            <option value="1000">1,000 กม.</option>
+                            <option value="1500">1,500 กม.</option>
+                            <option value="2000">2,000 กม.</option>
+                            <option value="2500">2,500 กม.</option>
+                            <option value="3000">3,000 กม.</option>
+                            <option value="3500">3,500 กม.</option>
+                            <option value="4000">4,000 กม.</option>
+                            <option value="4500">4,500 กม.</option>
+                            <option value="5000">5,000 กม.</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-bottle-droplet"></i> ยี่ห้อน้ำมัน</label>
+                        <select id="oilBrand" required>
+                            <option value="" disabled selected>เลือกยี่ห้อน้ำมัน</option>
+                            <option value="Castrol">Castrol</option>
+                            <option value="Repsol">Repsol</option>
+                            <option value="Shell">Shell</option>
+                            <option value="Valvoline">Valvoline</option>
+                            <option value="PTT">PTT</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <i class="fa-solid fa-floppy-disk"></i> บันทึก
+                </button>
+            </form>
+        </div>
+
+        <!-- ประวัติการเปลี่ยน -->
+        <div class="card history-card">
+            <div class="history-header">
+                <h3><i class="fa-solid fa-clock-rotate-left"></i> ประวัติการเปลี่ยน</h3>
+                <a href="https://docs.google.com/spreadsheets/d/10wUGaf0gEBKRygh3N0vRYpMpOKPRxlD-HQQCO6v-lgU/edit?gid=2064233403#gid=2064233403" target="_blank" class="btn-sheet">
+                    <i class="fa-solid fa-file-excel"></i> Sheet
+                </a>
+            </div>
+
+            <div id="historyList">
+                <!-- ข้อมูลประวัติจะดึงจาก Google Sheet มาแสดงตรงนี้อัตโนมัติ -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
