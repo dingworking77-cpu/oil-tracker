@@ -42,7 +42,13 @@
             margin: 0 auto;
         }
 
-        .btn-theme {
+        .top-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .btn-theme, .btn-refresh {
             background: var(--card-bg);
             color: var(--text-color);
             border: 1px solid var(--border-color);
@@ -50,8 +56,11 @@
             border-radius: 20px;
             cursor: pointer;
             font-size: 14px;
-            margin-bottom: 15px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .btn-refresh:hover, .btn-theme:hover {
+            opacity: 0.8;
         }
 
         h2 {
@@ -164,6 +173,36 @@
             border-radius: 6px;
             font-weight: bold;
             font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-edit, .btn-delete {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-edit:hover {
+            background-color: #e2e8f0;
+        }
+
+        .btn-delete {
+            color: #ef4444;
+            border-color: #fca5a5;
+        }
+
+        .btn-delete:hover {
+            background-color: #fee2e2;
         }
 
         @media(max-width: 480px) {
@@ -176,10 +215,15 @@
 </head>
 <body>
     <div class="container">
-        <!-- ปุ่มสลับโหมด -->
-        <button id="themeToggle" class="btn-theme">
-            <i class="fa-solid fa-moon"></i> โหมดมืด/สว่าง
-        </button>
+        <!-- ปุ่มควบคุมด้านบน (โหมด และ รีเฟรช) -->
+        <div class="top-buttons">
+            <button id="themeToggle" class="btn-theme">
+                <i class="fa-solid fa-moon"></i> โหมดมืด/สว่าง
+            </button>
+            <button id="refreshBtn" class="btn-refresh" onclick="loadRecordsFromSheet()">
+                <i class="fa-solid fa-rotate"></i> รีเฟรชข้อมูล
+            </button>
+        </div>
 
         <h2><i class="fa-solid fa-oil-can"></i> บันทึกการเปลี่ยนน้ำมันเครื่อง</h2>
 
@@ -187,6 +231,8 @@
         <div class="card form-card">
             <h3><i class="fa-solid fa-pen-to-square"></i> ฟอร์มบันทึก</h3>
             <form id="oilForm">
+                <input type="hidden" id="rowIndex" value="">
+                
                 <div class="form-row">
                     <div class="form-group">
                         <label><i class="fa-solid fa-calendar-days"></i> วันที่เปลี่ยน</label>
@@ -277,12 +323,15 @@
                 }
             });
 
-            // บันทึกข้อมูลส่งไป Google Sheet
+            // บันทึก หรือ แก้ไขข้อมูลส่งไป Google Sheet
             const form = document.getElementById('oilForm');
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
 
+                const rowIndex = document.getElementById('rowIndex').value;
                 const record = {
+                    action: rowIndex ? "update" : "insert",
+                    row: rowIndex,
                     date: document.getElementById('oilDate').value,
                     mileage: Number(document.getElementById('currentMileage').value),
                     interval: Number(document.getElementById('distanceInterval').value),
@@ -300,10 +349,11 @@
                 .then(response => response.json())
                 .then(data => {
                     form.reset();
+                    document.getElementById('rowIndex').value = "";
                     document.getElementById('oilDate').value = today;
+                    document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึก';
                     loadRecordsFromSheet();
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึก';
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -318,7 +368,7 @@
             const historyList = document.getElementById('historyList');
             historyList.innerHTML = '<p style="text-align: center;">กำลังโหลดข้อมูล...</p>';
 
-            fetch(WEB_APP_URL)
+            fetch(WEB_APP_URL + '?action=get')
             .then(response => response.json())
             .then(records => {
                 historyList.innerHTML = '';
@@ -346,6 +396,10 @@
                         <div class="next-mileage-box">
                             <i class="fa-solid fa-bell"></i> ไมล์ครั้งถัดไป: ${nextMileage.toLocaleString()} กม.
                         </div>
+                        <div class="history-actions">
+                            <button class="btn-edit" onclick="editRecord('${record.row}', '${record.date}', '${record.mileage}', '${record.interval}', '${record.brand}')"><i class="fa-solid fa-pen"></i> แก้ไข</button>
+                            <button class="btn-delete" onclick="deleteRecord('${record.row}')"><i class="fa-solid fa-trash"></i> ลบ</button>
+                        </div>
                     `;
                     historyList.appendChild(item);
                 });
@@ -354,6 +408,34 @@
                 console.error('Error:', error);
                 historyList.innerHTML = '<p style="text-align: center; color: red;">ไม่สามารถโหลดข้อมูลได้</p>';
             });
+        }
+
+        function editRecord(row, date, mileage, interval, brand) {
+            document.getElementById('rowIndex').value = row;
+            document.getElementById('oilDate').value = date;
+            document.getElementById('currentMileage').value = mileage;
+            document.getElementById('distanceInterval').value = interval;
+            document.getElementById('oilBrand').value = brand;
+
+            document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> บันทึกการแก้ไข';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function deleteRecord(row) {
+            if (confirm('คุณต้องการลบประวัติรายการนี้ใช่หรือไม่?')) {
+                fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "delete", row: row })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    loadRecordsFromSheet();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('เกิดข้อผิดพลาดในการลบข้อมูล');
+                });
+            }
         }
     </script>
 </body>
