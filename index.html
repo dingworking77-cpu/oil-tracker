@@ -52,12 +52,12 @@
     .card { background-color: var(--card-bg); border-radius: 16px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
     .card-title { font-size: 15px; font-weight: bold; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
     
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-    .form-group { display: flex; flex-direction: column; gap: 5px; }
-    .form-group.full-width { grid-column: span 2; }
+    /* ปรับเป็น 1 คอลัมน์เดี่ยวยาวทั้งหมด */
+    .form-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; width: 100%; }
     
     label { font-size: 12px; font-weight: 600; color: var(--text-color); display: flex; align-items: center; gap: 4px; }
-    input, select { width: 100%; padding: 9px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--card-bg); color: var(--text-color); font-size: 13px; outline: none; }
+    input, select { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--card-bg); color: var(--text-color); font-size: 13px; outline: none; }
     input:focus, select:focus { border-color: var(--primary-color); }
     
     .btn-submit { width: 100%; padding: 11px; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -86,7 +86,7 @@
         <i class="fa-solid fa-moon"></i> โหมดมืด
       </button>
       <button class="btn-toggle" onclick="loadRecords()" id="btnRefresh">
-        <i class="fa-solid fa-rotate-right" id="refreshIcon"></i> รีเฟรช
+        <i class="fa-solid fa-rotate-right" id="refreshIcon"></i> รีเฟรชข้อมูล
       </button>
     </div>
 
@@ -110,20 +110,23 @@
         <input type="hidden" id="recordId">
         
         <div class="form-grid">
+          <!-- 1. วันที่เปลี่ยน (เต็มแถว) -->
           <div class="form-group">
             <label><i class="fa-regular fa-calendar-days"></i> วันที่เปลี่ยน</label>
             <input type="date" id="inputDate" required>
           </div>
+
+          <!-- 2. เลขไมล์ตอนเปลี่ยน (เต็มแถว) -->
           <div class="form-group">
             <label><i class="fa-solid fa-gauge-high"></i> เลขไมล์ตอนเปลี่ยน</label>
             <input type="number" id="inputMileage" placeholder="กรอกเลขไมล์" required>
           </div>
           
-          <!-- ระยะทาง -->
+          <!-- 3. ระยะทาง (เต็มแถว) -->
           <div class="form-group">
             <label><i class="fa-solid fa-route"></i> ระยะทาง</label>
             <select id="inputDistanceSelect" onchange="checkCustomDistance()" required>
-              <option value="">เลือกระยะทาง</option>
+              <option value="">เลือกช่วงระยะทาง</option>
               <option value="1000">1,000 กม.</option>
               <option value="2000">2,000 กม.</option>
               <option value="3000">3,000 กม.</option>
@@ -134,13 +137,13 @@
             </select>
           </div>
 
-          <!-- ช่องกรอกเพิ่มถ้าเลือกระยะทาง "อื่น..." -->
+          <!-- ช่องกรอกเพิ่มถ้าเลือกระยะทาง "อื่น..." (เต็มแถว) -->
           <div class="form-group hidden" id="customDistanceGroup">
             <label><i class="fa-solid fa-pen"></i> ระบุระยะทาง (กม.)</label>
             <input type="number" id="inputCustomDistance" placeholder="ระบุตัวเลข กม.">
           </div>
 
-          <!-- ยี่ห้อน้ำมัน -->
+          <!-- 4. ยี่ห้อน้ํามัน (เต็มแถว) -->
           <div class="form-group">
             <label><i class="fa-solid fa-flask"></i> ยี่ห้อน้ํามัน</label>
             <select id="inputBrandSelect" onchange="checkCustomBrand()" required>
@@ -155,8 +158,8 @@
             </select>
           </div>
 
-          <!-- ช่องกรอกเพิ่มถ้าเลือกยี่ห้อ "อื่น..." -->
-          <div class="form-group full-width hidden" id="customBrandGroup">
+          <!-- ช่องกรอกเพิ่มถ้าเลือกยี่ห้อ "อื่น..." (เต็มแถว) -->
+          <div class="form-group hidden" id="customBrandGroup">
             <label><i class="fa-solid fa-pen"></i> ระบุยี่ห้อน้ำมันเครื่อง...</label>
             <input type="text" id="inputCustomBrand" placeholder="ระบุยี่ห้อเพิ่มเติม">
           </div>
@@ -210,26 +213,21 @@
       loadRecords();
     }
 
-    // จัดการการแสดงผลช่องกรอกระยะทาง "อื่น..."
     function checkCustomDistance() {
       const select = document.getElementById('inputDistanceSelect');
       const customGroup = document.getElementById('customDistanceGroup');
       const customInput = document.getElementById('inputCustomDistance');
-      const distGroupParent = select.closest('.form-group');
 
       if (select.value === 'อื่น...') {
         customGroup.classList.remove('hidden');
         customInput.required = true;
-        distGroupParent.classList.remove('full-width');
       } else {
         customGroup.classList.add('hidden');
         customInput.required = false;
         customInput.value = '';
-        distGroupParent.classList.add('full-width');
       }
     }
 
-    // จัดการการแสดงผลช่องกรอกยี่ห้อ "อื่น..."
     function checkCustomBrand() {
       const select = document.getElementById('inputBrandSelect');
       const customGroup = document.getElementById('customBrandGroup');
