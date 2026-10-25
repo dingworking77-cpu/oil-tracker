@@ -1,442 +1,357 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>บันทึกการเปลี่ยนน้ำมันเครื่อง</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --bg-color: #f0f4f8;
-            --card-bg: #ffffff;
-            --text-color: #2c3e50;
-            --primary-color: #1e3a8a;
-            --border-color: #cbd5e1;
-            --input-bg: #ffffff;
-            --alert-bg: #fef3c7;
-            --alert-text: #b45309;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>บันทึกการเปลี่ยนน้ำมันเครื่อง</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-color: #f0f4f9;
+      --card-bg: #ffffff;
+      --text-color: #1f2937;
+      --text-muted: #6b7280;
+      --primary-color: #1e3a8a;
+      --primary-hover: #1d4ed8;
+      --border-color: #e5e7eb;
+      --history-card-bg: #f8fafc;
+      --alert-bg: #fef3c7;
+      --alert-text: #92400e;
+      --tab-active: #1e3a8a;
+      --tab-text: #4b5563;
+    }
 
-        body.dark-mode {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-color: #f1f5f9;
-            --primary-color: #3b82f6;
-            --border-color: #475569;
-            --input-bg: #0f172a;
-            --alert-bg: #451a03;
-            --alert-text: #fde68a;
-        }
+    body.dark-mode {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-color: #f3f4f6;
+      --text-muted: #9ca3af;
+      --primary-color: #3b82f6;
+      --primary-hover: #2563eb;
+      --border-color: #334155;
+      --history-card-bg: #0f172a;
+      --alert-bg: #451a03;
+      --alert-text: #fde68a;
+      --tab-active: #3b82f6;
+      --tab-text: #9ca3af;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            transition: background 0.3s, color 0.3s;
-        }
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.2s, color 0.2s; }
+    body { background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 15px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 500px; }
+    .top-bar { display: flex; justify-content: space-between; margin-bottom: 15px; }
+    .btn-toggle { background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .title { text-align: center; color: var(--primary-color); font-size: 20px; font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .tabs { display: flex; gap: 5px; margin-bottom: 15px; background: var(--card-bg); padding: 5px; border-radius: 12px; border: 1px solid var(--border-color); }
+    .tab-btn { flex: 1; padding: 8px 4px; border: none; background: none; color: var(--tab-text); font-weight: 600; font-size: 11px; border-radius: 8px; cursor: pointer; text-align: center; }
+    .tab-btn.active { background-color: var(--tab-active); color: #ffffff; }
+    .card { background-color: var(--card-bg); border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    .card-title { font-size: 16px; font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full-width { grid-column: span 2; }
+    label { font-size: 13px; font-weight: 600; color: var(--text-color); display: flex; align-items: center; gap: 5px; }
+    input, select { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--card-bg); color: var(--text-color); font-size: 14px; outline: none; }
+    input:focus, select:focus { border-color: var(--primary-color); }
+    .btn-submit { width: 100%; padding: 12px; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-submit:hover { background-color: var(--primary-hover); }
+    .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    .history-item { background-color: var(--history-card-bg); border-radius: 12px; padding: 15px; margin-bottom: 12px; border: 1px solid var(--border-color); }
+    .history-date { font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; font-size: 14px; }
+    .history-detail { font-size: 13px; color: var(--text-color); line-height: 1.6; }
+    .alert-box { background-color: var(--alert-bg); color: var(--alert-text); padding: 10px; border-radius: 8px; margin-top: 10px; font-weight: bold; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+    .action-btns { display: flex; gap: 10px; margin-top: 12px; }
+    .btn-action { flex: 1; padding: 6px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--card-bg); color: var(--text-color); font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
+    .btn-delete { color: #ef4444; border-color: #fca5a5; }
+    .hidden { display: none !important; }
 
-        .container {
-            max-width: 550px;
-            margin: 0 auto;
-        }
-
-        .top-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .btn-theme, .btn-refresh {
-            background: var(--card-bg);
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .btn-refresh:hover, .btn-theme:hover {
-            opacity: 0.8;
-        }
-
-        h2 {
-            text-align: center;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
-            border: 1px solid var(--border-color);
-        }
-
-        h3 {
-            margin-top: 0;
-            font-size: 18px;
-            color: var(--text-color);
-        }
-
-        .form-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .form-group {
-            flex: 1;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            font-size: 15px;
-            box-sizing: border-box;
-        }
-
-        .btn-submit {
-            width: 100%;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .btn-submit:hover {
-            opacity: 0.9;
-        }
-
-        .history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .btn-sheet {
-            background-color: #10b981;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .history-item {
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .history-date {
-            font-weight: bold;
-            font-size: 16px;
-            margin-bottom: 8px;
-        }
-
-        .history-details {
-            font-size: 14px;
-            margin-bottom: 12px;
-            line-height: 1.6;
-        }
-
-        .next-mileage-box {
-            background-color: var(--alert-bg);
-            color: var(--alert-text);
-            padding: 10px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 12px;
-        }
-
-        .history-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-edit, .btn-delete {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            background: var(--card-bg);
-            color: var(--text-color);
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .btn-edit:hover {
-            background-color: #e2e8f0;
-        }
-
-        .btn-delete {
-            color: #ef4444;
-            border-color: #fca5a5;
-        }
-
-        .btn-delete:hover {
-            background-color: #fee2e2;
-        }
-
-        @media(max-width: 480px) {
-            .form-row {
-                flex-direction: column;
-                gap: 0;
-            }
-        }
-    </style>
+    /* อニメชันหมุน (Spinner) */
+    .fa-spin-custom {
+      animation: fa-spin 1s infinite linear;
+    }
+    @keyframes fa-spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <!-- ปุ่มควบคุมด้านบน (โหมด และ รีเฟรช) -->
-        <div class="top-buttons">
-            <button id="themeToggle" class="btn-theme">
-                <i class="fa-solid fa-moon"></i> โหมดมืด/สว่าง
-            </button>
-            <button id="refreshBtn" class="btn-refresh" onclick="loadRecordsFromSheet()">
-                <i class="fa-solid fa-rotate"></i> รีเฟรชข้อมูล
-            </button>
-        </div>
 
-        <h2><i class="fa-solid fa-oil-can"></i> บันทึกการเปลี่ยนน้ำมันเครื่อง</h2>
-
-        <!-- ฟอร์มบันทึก -->
-        <div class="card form-card">
-            <h3><i class="fa-solid fa-pen-to-square"></i> ฟอร์มบันทึก</h3>
-            <form id="oilForm">
-                <input type="hidden" id="rowIndex" value="">
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label><i class="fa-solid fa-calendar-days"></i> วันที่เปลี่ยน</label>
-                        <input type="date" id="oilDate" required>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fa-solid fa-gauge"></i> เลขไมล์ตอนเปลี่ยน</label>
-                        <input type="number" id="currentMileage" placeholder="กรอกเลขไมล์" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label><i class="fa-solid fa-route"></i> ระยะทาง</label>
-                        <select id="distanceInterval" required>
-                            <option value="" disabled selected>เลือกช่วงระยะทาง</option>
-                            <option value="1000">1,000 กม.</option>
-                            <option value="1500">1,500 กม.</option>
-                            <option value="2000">2,000 กม.</option>
-                            <option value="2500">2,500 กม.</option>
-                            <option value="3000">3,000 กม.</option>
-                            <option value="3500">3,500 กม.</option>
-                            <option value="4000">4,000 กม.</option>
-                            <option value="4500">4,500 กม.</option>
-                            <option value="5000">5,000 กม.</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fa-solid fa-bottle-droplet"></i> ยี่ห้อน้ำมัน</label>
-                        <select id="oilBrand" required>
-                            <option value="" disabled selected>เลือกยี่ห้อน้ำมัน</option>
-                            <option value="Castrol">Castrol</option>
-                            <option value="Repsol">Repsol</option>
-                            <option value="Shell">Shell</option>
-                            <option value="Valvoline">Valvoline</option>
-                            <option value="PTT">PTT</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-submit" id="submitBtn">
-                    <i class="fa-solid fa-floppy-disk"></i> บันทึก
-                </button>
-            </form>
-        </div>
-
-        <!-- ประวัติการเปลี่ยน -->
-        <div class="card history-card">
-            <div class="history-header">
-                <h3><i class="fa-solid fa-clock-rotate-left"></i> ประวัติการเปลี่ยน</h3>
-                <a href="https://docs.google.com/spreadsheets/d/10wUGaf0gEBKRygh3N0vRYpMpOKPRxlD-HQQCO6v-lgU/edit?gid=2064233403#gid=2064233403" target="_blank" class="btn-sheet">
-                    <i class="fa-solid fa-file-excel"></i> Sheet
-                </a>
-            </div>
-
-            <div id="historyList">
-                <!-- ข้อมูลประวัติจะดึงจาก Google Sheet มาแสดงตรงนี้อัตโนมัติ -->
-            </div>
-        </div>
+  <div class="container">
+    <div class="top-bar">
+      <button class="btn-toggle" onclick="toggleDarkMode()">
+        <i class="fa-solid fa-moon"></i> โหมดมืด
+      </button>
+      <button class="btn-toggle" onclick="loadRecords()" id="btnRefresh">
+        <i class="fa-solid fa-rotate-right" id="refreshIcon"></i> รีเฟรชข้อมูล
+      </button>
     </div>
 
-    <script>
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwIyj2ZQuVWIdNYJCWpZJ1SJ83y_udLOZAm4rcpT2GuHOblNzkQly0Yn_YqPOa5sZ_ZQw/exec';
+    <div class="title">
+      <i class="fa-solid fa-oil-can"></i> บันทึกการเปลี่ยนน้ำมันเครื่อง
+    </div>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('oilDate').value = today;
+    <!-- Vehicle Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('Honda Wave 125')">Wave 125</button>
+      <button class="tab-btn" onclick="switchTab('Yamaha Grand Filano')">Grand Filano</button>
+      <button class="tab-btn" onclick="switchTab('Yaris Ativ')">Yaris Ativ</button>
+    </div>
 
-            loadRecordsFromSheet();
+    <!-- Input Form Card -->
+    <div class="card">
+      <div class="card-title">
+        <i class="fa-regular fa-pen-to-square"></i> ฟอร์มบันทึก
+      </div>
+      <form id="oilForm" onsubmit="handleFormSubmit(event)">
+        <input type="hidden" id="recordId">
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label><i class="fa-regular fa-calendar-days"></i> วันที่เปลี่ยน</label>
+            <input type="date" id="inputDate" required>
+          </div>
+          <div class="form-group">
+            <label><i class="fa-solid fa-gauge-high"></i> เลขไมล์ตอนเปลี่ยน</label>
+            <input type="number" id="inputMileage" placeholder="กรอกเลขไมล์" required>
+          </div>
+          <div class="form-group">
+            <label><i class="fa-solid fa-route"></i> ระยะทาง</label>
+            <select id="inputDistance" required>
+              <option value="">เลือกช่วงระยะทาง</option>
+              <option value="1000">1,000 กม.</option>
+              <option value="2000">2,000 กม.</option>
+              <option value="3000">3,000 กม.</option>
+              <option value="4000">4,000 กม.</option>
+              <option value="5000">5,000 กม.</option>
+              <option value="10000">10,000 กม.</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label><i class="fa-solid fa-flask"></i> ยี่ห้อน้ํามัน</label>
+            <select id="inputBrandSelect" onchange="checkCustomBrand()" required>
+              <option value="">เลือกยี่ห้อน้ํามัน</option>
+              <option value="Castrol">Castrol</option>
+              <option value="Shell">Shell</option>
+              <option value="PTT">PTT</option>
+              <option value="Motul">Motul</option>
+              <option value="Yamalube">Yamalube</option>
+              <option value="Honda">Honda</option>
+              <option value="อื่น...">อื่น...</option>
+            </select>
+          </div>
 
-            // ระบบสลับธีม มืด/สว่าง
-            const themeToggle = document.getElementById('themeToggle');
-            const savedTheme = localStorage.getItem('theme');
+          <div class="form-group full-width hidden" id="customBrandGroup">
+            <label><i class="fa-solid fa-pen"></i> ระบุยี่ห้อน้ำมันเครื่อง...</label>
+            <input type="text" id="inputCustomBrand" placeholder="ระบุยี่ห้อเพิ่มเติม">
+          </div>
+        </div>
 
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark-mode');
-                themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i> โหมดสว่าง';
-            }
+        <button type="submit" class="btn-submit" id="btnSave">
+          <i class="fa-solid fa-floppy-disk" id="saveIcon"></i> บันทึก
+        </button>
+      </form>
+    </div>
 
-            themeToggle.addEventListener('click', () => {
-                document.body.classList.toggle('dark-mode');
-                if (document.body.classList.contains('dark-mode')) {
-                    localStorage.setItem('theme', 'dark');
-                    themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i> โหมดสว่าง';
-                } else {
-                    localStorage.setItem('theme', 'light');
-                    themeToggle.innerHTML = '<i class="fa-solid fa-moon"></i> โหมดมืด';
-                }
-            });
+    <!-- History Card -->
+    <div class="card">
+      <div class="history-header">
+        <div class="card-title" style="margin:0;">
+          <i class="fa-solid fa-clock-rotate-left"></i> ประวัติการเปลี่ยน
+        </div>
+      </div>
+      <div id="historyList">
+        <p style="text-align: center; color: var(--text-muted);">กำลังโหลดข้อมูล...</p>
+      </div>
+    </div>
+  </div>
 
-            // บันทึก หรือ แก้ไขข้อมูลส่งไป Google Sheet
-            const form = document.getElementById('oilForm');
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
+  <script>
+    // ใส่ URL Web App ของคุณเรียบร้อยแล้ว
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8afaimUts7osjqXMkWH9NljWmhYwWraWa2MUr-ToayWvmlR5n9zEic-gAr1bqDrL7/exec"; 
 
-                const rowIndex = document.getElementById('rowIndex').value;
-                const record = {
-                    action: rowIndex ? "update" : "insert",
-                    row: rowIndex,
-                    date: document.getElementById('oilDate').value,
-                    mileage: Number(document.getElementById('currentMileage').value),
-                    interval: Number(document.getElementById('distanceInterval').value),
-                    brand: document.getElementById('oilBrand').value
-                };
+    let currentVehicle = "Honda Wave 125";
+    let recordsData = [];
 
-                const submitBtn = document.getElementById('submitBtn');
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...';
+    window.onload = function() {
+      document.getElementById('inputDate').valueAsDate = new Date();
+      loadRecords();
+    };
 
-                fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(record)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    form.reset();
-                    document.getElementById('rowIndex').value = "";
-                    document.getElementById('oilDate').value = today;
-                    document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึก';
-                    loadRecordsFromSheet();
-                    submitBtn.disabled = false;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึก';
-                });
-            });
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+
+    function switchTab(vehicle) {
+      currentVehicle = vehicle;
+      const tabs = document.querySelectorAll('.tab-btn');
+      tabs.forEach(tab => {
+        if(tab.innerText.includes(vehicle) || (vehicle.includes('Grand') && tab.innerText.includes('Grand'))) {
+          tab.classList.add('active');
+        } else {
+          tab.classList.remove('active');
+        }
+      });
+      resetForm();
+      loadRecords();
+    }
+
+    function checkCustomBrand() {
+      const select = document.getElementById('inputBrandSelect');
+      const customGroup = document.getElementById('customBrandGroup');
+      const customInput = document.getElementById('inputCustomBrand');
+
+      if (select.value === 'อื่น...') {
+        customGroup.classList.remove('hidden');
+        customInput.required = true;
+      } else {
+        customGroup.classList.add('hidden');
+        customInput.required = false;
+        customInput.value = '';
+      }
+    }
+
+    function loadRecords() {
+      const listContainer = document.getElementById('historyList');
+      const refreshIcon = document.getElementById('refreshIcon');
+      
+      refreshIcon.classList.add('fa-spin-custom');
+      listContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin-custom"></i> กำลังโหลดข้อมูล...</p>';
+
+      fetch(`${SCRIPT_URL}?action=getRecords&vehicle=${encodeURIComponent(currentVehicle)}`)
+        .then(res => res.json())
+        .then(data => {
+          refreshIcon.classList.remove('fa-spin-custom');
+          renderHistory(data);
+        })
+        .catch(err => {
+          refreshIcon.classList.remove('fa-spin-custom');
+          listContainer.innerHTML = '<p style="text-align: center; color: #ef4444;">ไม่สามารถโหลดข้อมูลได้ (ตรวจสอบ URL)</p>';
+          console.error(err);
         });
+    }
 
-        function loadRecordsFromSheet() {
-            const historyList = document.getElementById('historyList');
-            historyList.innerHTML = '<p style="text-align: center;">กำลังโหลดข้อมูล...</p>';
+    function renderHistory(records) {
+      recordsData = records;
+      const listContainer = document.getElementById('historyList');
+      listContainer.innerHTML = '';
 
-            fetch(WEB_APP_URL + '?action=get')
-            .then(response => response.json())
-            .then(records => {
-                historyList.innerHTML = '';
+      if (!records || records.length === 0) {
+        listContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted);">ไม่พบประวัติการบันทึก</p>';
+        return;
+      }
 
-                if (!records || records.length === 0) {
-                    historyList.innerHTML = '<p style="text-align: center; color: var(--border-color);">ยังไม่มีประวัติการบันทึก</p>';
-                    return;
-                }
+      records.forEach(item => {
+        const nextMileage = Number(item.mileage) + Number(item.distance);
+        const card = document.createElement('div');
+        card.className = 'history-item';
+        card.innerHTML = `
+          <div class="history-date">
+            <i class="fa-regular fa-calendar-days"></i> ${item.date}
+          </div>
+          <div class="history-detail">
+            <div><i class="fa-solid fa-gauge-high"></i> ไมล์ตอนเปลี่ยน: <b>${item.mileage.toLocaleString()} กม.</b></div>
+            <div><i class="fa-solid fa-route"></i> ระยะทาง: <b>${item.distance.toLocaleString()} กม.</b></div>
+            <div><i class="fa-solid fa-flask"></i> ยี่ห้อ: <b>${item.brand}</b></div>
+          </div>
+          <div class="alert-box">
+            <i class="fa-solid fa-bell"></i> ไมล์ครั้งถัดไป: ${nextMileage.toLocaleString()} กม.
+          </div>
+          <div class="action-btns">
+            <button class="btn-action" onclick="editRecord('${item.id}')">
+              <i class="fa-regular fa-pen-to-square"></i> แก้ไข
+            </button>
+            <button class="btn-action btn-delete" onclick="deleteRecord('${item.id}')">
+              <i class="fa-regular fa-trash-can"></i> ลบ
+            </button>
+          </div>
+        `;
+        listContainer.appendChild(card);
+      });
+    }
 
-                // เรียงจากล่าสุดไปเก่าสุด
-                records.reverse();
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      
+      const id = document.getElementById('recordId').value;
+      const date = document.getElementById('inputDate').value;
+      const mileage = document.getElementById('inputMileage').value;
+      const distance = document.getElementById('inputDistance').value;
+      let brand = document.getElementById('inputBrandSelect').value;
 
-                records.forEach(record => {
-                    const nextMileage = Number(record.mileage) + Number(record.interval);
+      if (brand === 'อื่น...') {
+        brand = document.getElementById('inputCustomBrand').value;
+      }
 
-                    const item = document.createElement('div');
-                    item.className = 'history-item';
-                    item.innerHTML = `
-                        <div class="history-date"><i class="fa-solid fa-calendar-days"></i> ${record.date}</div>
-                        <div class="history-details">
-                            <div><i class="fa-solid fa-gauge"></i> ไมล์ตอนเปลี่ยน: <b>${Number(record.mileage).toLocaleString()} กม.</b></div>
-                            <div><i class="fa-solid fa-route"></i> ระยะทาง: <b>${Number(record.interval).toLocaleString()} กม.</b></div>
-                            <div><i class="fa-solid fa-bottle-droplet"></i> ยี่ห้อ: <b>${record.brand}</b></div>
-                        </div>
-                        <div class="next-mileage-box">
-                            <i class="fa-solid fa-bell"></i> ไมล์ครั้งถัดไป: ${nextMileage.toLocaleString()} กม.
-                        </div>
-                        <div class="history-actions">
-                            <button class="btn-edit" onclick="editRecord('${record.row}', '${record.date}', '${record.mileage}', '${record.interval}', '${record.brand}')"><i class="fa-solid fa-pen"></i> แก้ไข</button>
-                            <button class="btn-delete" onclick="deleteRecord('${record.row}')"><i class="fa-solid fa-trash"></i> ลบ</button>
-                        </div>
-                    `;
-                    historyList.appendChild(item);
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                historyList.innerHTML = '<p style="text-align: center; color: red;">ไม่สามารถโหลดข้อมูลได้</p>';
-            });
-        }
+      const payload = { id, date, mileage, distance, brand };
+      const btn = document.getElementById('btnSave');
+      const saveIcon = document.getElementById('saveIcon');
 
-        function editRecord(row, date, mileage, interval, brand) {
-            document.getElementById('rowIndex').value = row;
-            document.getElementById('oilDate').value = date;
-            document.getElementById('currentMileage').value = mileage;
-            document.getElementById('distanceInterval').value = interval;
-            document.getElementById('oilBrand').value = brand;
+      btn.disabled = true;
+      saveIcon.className = "fa-solid fa-spinner fa-spin-custom";
+      btn.childNodes[2].nodeValue = " กำลังบันทึก...";
 
-            document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> บันทึกการแก้ไข';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'saveRecord', vehicle: currentVehicle, data: payload })
+      })
+      .then(res => res.json())
+      .then(res => {
+        btn.disabled = false;
+        saveIcon.className = "fa-solid fa-floppy-disk";
+        btn.childNodes[2].nodeValue = " บันทึก";
+        resetForm();
+        loadRecords();
+      })
+      .catch(err => {
+        btn.disabled = false;
+        saveIcon.className = "fa-solid fa-floppy-disk";
+        btn.childNodes[2].nodeValue = " บันทึก";
+        alert('เกิดข้อผิดพลาดในการบันทึก');
+      });
+    }
 
-        function deleteRecord(row) {
-            if (confirm('คุณต้องการลบประวัติรายการนี้ใช่หรือไม่?')) {
-                fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "delete", row: row })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    loadRecordsFromSheet();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('เกิดข้อผิดพลาดในการลบข้อมูล');
-                });
-            }
-        }
-    </script>
+    function editRecord(id) {
+      const item = recordsData.find(r => r.id === id);
+      if (!item) return;
+
+      document.getElementById('recordId').value = item.id;
+      document.getElementById('inputDate').value = item.date;
+      document.getElementById('inputMileage').value = item.mileage;
+      document.getElementById('inputDistance').value = item.distance;
+
+      const brandSelect = document.getElementById('inputBrandSelect');
+      const standardBrands = ['Castrol', 'Shell', 'PTT', 'Motul', 'Yamalube', 'Honda'];
+
+      if (standardBrands.includes(item.brand)) {
+        brandSelect.value = item.brand;
+        checkCustomBrand();
+      } else {
+        brandSelect.value = 'อื่น...';
+        checkCustomBrand();
+        document.getElementById('inputCustomBrand').value = item.brand;
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function deleteRecord(id) {
+      if (!confirm('คุณต้องการลบรายการนี้ใช่หรือไม่?')) return;
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'deleteRecord', vehicle: currentVehicle, id: id })
+      })
+      .then(res => res.json())
+      .then(() => loadRecords());
+    }
+
+    function resetForm() {
+      document.getElementById('oilForm').reset();
+      document.getElementById('recordId').value = '';
+      document.getElementById('inputDate').valueAsDate = new Date();
+      checkCustomBrand();
+    }
+  </script>
 </body>
 </html>
