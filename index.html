@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>บันทึกการเปลี่ยนน้ำมันเครื่อง</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -37,42 +37,45 @@
     }
 
     * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.2s, color 0.2s; }
-    body { background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 15px; display: flex; justify-content: center; }
-    .container { width: 100%; max-width: 500px; }
-    .top-bar { display: flex; justify-content: space-between; margin-bottom: 15px; }
-    .btn-toggle { background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-    .title { text-align: center; color: var(--primary-color); font-size: 20px; font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .tabs { display: flex; gap: 5px; margin-bottom: 15px; background: var(--card-bg); padding: 5px; border-radius: 12px; border: 1px solid var(--border-color); }
-    .tab-btn { flex: 1; padding: 8px 4px; border: none; background: none; color: var(--tab-text); font-weight: 600; font-size: 11px; border-radius: 8px; cursor: pointer; text-align: center; }
+    body { background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 10px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 480px; }
+    
+    .top-bar { display: flex; justify-content: space-between; margin-bottom: 12px; }
+    .btn-toggle { background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    
+    .title { text-align: center; color: var(--primary-color); font-size: 18px; font-weight: bold; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    
+    .tabs { display: flex; gap: 4px; margin-bottom: 12px; background: var(--card-bg); padding: 4px; border-radius: 12px; border: 1px solid var(--border-color); }
+    .tab-btn { flex: 1; padding: 8px 2px; border: none; background: none; color: var(--tab-text); font-weight: 600; font-size: 11px; border-radius: 8px; cursor: pointer; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .tab-btn.active { background-color: var(--tab-active); color: #ffffff; }
-    .card { background-color: var(--card-bg); border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-    .card-title { font-size: 16px; font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    
+    .card { background-color: var(--card-bg); border-radius: 16px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    .card-title { font-size: 15px; font-weight: bold; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
     .form-group.full-width { grid-column: span 2; }
-    label { font-size: 13px; font-weight: 600; color: var(--text-color); display: flex; align-items: center; gap: 5px; }
-    input, select { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--card-bg); color: var(--text-color); font-size: 14px; outline: none; }
+    
+    label { font-size: 12px; font-weight: 600; color: var(--text-color); display: flex; align-items: center; gap: 4px; }
+    input, select { width: 100%; padding: 9px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--card-bg); color: var(--text-color); font-size: 13px; outline: none; }
     input:focus, select:focus { border-color: var(--primary-color); }
-    .btn-submit { width: 100%; padding: 12px; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    
+    .btn-submit { width: 100%; padding: 11px; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .btn-submit:hover { background-color: var(--primary-hover); }
-    .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-    .history-item { background-color: var(--history-card-bg); border-radius: 12px; padding: 15px; margin-bottom: 12px; border: 1px solid var(--border-color); }
-    .history-date { font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; font-size: 14px; }
-    .history-detail { font-size: 13px; color: var(--text-color); line-height: 1.6; }
-    .alert-box { background-color: var(--alert-bg); color: var(--alert-text); padding: 10px; border-radius: 8px; margin-top: 10px; font-weight: bold; font-size: 13px; display: flex; align-items: center; gap: 6px; }
-    .action-btns { display: flex; gap: 10px; margin-top: 12px; }
+    
+    .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .history-item { background-color: var(--history-card-bg); border-radius: 12px; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border-color); }
+    .history-date { font-weight: bold; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; font-size: 13px; }
+    .history-detail { font-size: 12px; color: var(--text-color); line-height: 1.5; }
+    .alert-box { background-color: var(--alert-bg); color: var(--alert-text); padding: 8px 10px; border-radius: 6px; margin-top: 8px; font-weight: bold; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+    
+    .action-btns { display: flex; gap: 8px; margin-top: 10px; }
     .btn-action { flex: 1; padding: 6px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--card-bg); color: var(--text-color); font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
     .btn-delete { color: #ef4444; border-color: #fca5a5; }
     .hidden { display: none !important; }
 
-    /* อニメชันหมุน (Spinner) */
-    .fa-spin-custom {
-      animation: fa-spin 1s infinite linear;
-    }
-    @keyframes fa-spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    .fa-spin-custom { animation: fa-spin 1s infinite linear; }
+    @keyframes fa-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -83,7 +86,7 @@
         <i class="fa-solid fa-moon"></i> โหมดมืด
       </button>
       <button class="btn-toggle" onclick="loadRecords()" id="btnRefresh">
-        <i class="fa-solid fa-rotate-right" id="refreshIcon"></i> รีเฟรชข้อมูล
+        <i class="fa-solid fa-rotate-right" id="refreshIcon"></i> รีเฟรช
       </button>
     </div>
 
@@ -115,22 +118,33 @@
             <label><i class="fa-solid fa-gauge-high"></i> เลขไมล์ตอนเปลี่ยน</label>
             <input type="number" id="inputMileage" placeholder="กรอกเลขไมล์" required>
           </div>
+          
+          <!-- ระยะทาง -->
           <div class="form-group">
             <label><i class="fa-solid fa-route"></i> ระยะทาง</label>
-            <select id="inputDistance" required>
-              <option value="">เลือกช่วงระยะทาง</option>
+            <select id="inputDistanceSelect" onchange="checkCustomDistance()" required>
+              <option value="">เลือกระยะทาง</option>
               <option value="1000">1,000 กม.</option>
               <option value="2000">2,000 กม.</option>
               <option value="3000">3,000 กม.</option>
               <option value="4000">4,000 กม.</option>
               <option value="5000">5,000 กม.</option>
               <option value="10000">10,000 กม.</option>
+              <option value="อื่น...">อื่น...</option>
             </select>
           </div>
+
+          <!-- ช่องกรอกเพิ่มถ้าเลือกระยะทาง "อื่น..." -->
+          <div class="form-group hidden" id="customDistanceGroup">
+            <label><i class="fa-solid fa-pen"></i> ระบุระยะทาง (กม.)</label>
+            <input type="number" id="inputCustomDistance" placeholder="ระบุตัวเลข กม.">
+          </div>
+
+          <!-- ยี่ห้อน้ำมัน -->
           <div class="form-group">
             <label><i class="fa-solid fa-flask"></i> ยี่ห้อน้ํามัน</label>
             <select id="inputBrandSelect" onchange="checkCustomBrand()" required>
-              <option value="">เลือกยี่ห้อน้ํามัน</option>
+              <option value="">เลือกยี่ห้อ</option>
               <option value="Castrol">Castrol</option>
               <option value="Shell">Shell</option>
               <option value="PTT">PTT</option>
@@ -141,6 +155,7 @@
             </select>
           </div>
 
+          <!-- ช่องกรอกเพิ่มถ้าเลือกยี่ห้อ "อื่น..." -->
           <div class="form-group full-width hidden" id="customBrandGroup">
             <label><i class="fa-solid fa-pen"></i> ระบุยี่ห้อน้ำมันเครื่อง...</label>
             <input type="text" id="inputCustomBrand" placeholder="ระบุยี่ห้อเพิ่มเติม">
@@ -167,7 +182,6 @@
   </div>
 
   <script>
-    // ใส่ URL Web App ของคุณเรียบร้อยแล้ว
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8afaimUts7osjqXMkWH9NljWmhYwWraWa2MUr-ToayWvmlR5n9zEic-gAr1bqDrL7/exec"; 
 
     let currentVehicle = "Honda Wave 125";
@@ -196,6 +210,26 @@
       loadRecords();
     }
 
+    // จัดการการแสดงผลช่องกรอกระยะทาง "อื่น..."
+    function checkCustomDistance() {
+      const select = document.getElementById('inputDistanceSelect');
+      const customGroup = document.getElementById('customDistanceGroup');
+      const customInput = document.getElementById('inputCustomDistance');
+      const distGroupParent = select.closest('.form-group');
+
+      if (select.value === 'อื่น...') {
+        customGroup.classList.remove('hidden');
+        customInput.required = true;
+        distGroupParent.classList.remove('full-width');
+      } else {
+        customGroup.classList.add('hidden');
+        customInput.required = false;
+        customInput.value = '';
+        distGroupParent.classList.add('full-width');
+      }
+    }
+
+    // จัดการการแสดงผลช่องกรอกยี่ห้อ "อื่น..."
     function checkCustomBrand() {
       const select = document.getElementById('inputBrandSelect');
       const customGroup = document.getElementById('customBrandGroup');
@@ -226,7 +260,7 @@
         })
         .catch(err => {
           refreshIcon.classList.remove('fa-spin-custom');
-          listContainer.innerHTML = '<p style="text-align: center; color: #ef4444;">ไม่สามารถโหลดข้อมูลได้ (ตรวจสอบ URL)</p>';
+          listContainer.innerHTML = '<p style="text-align: center; color: #ef4444;">ไม่สามารถโหลดข้อมูลได้</p>';
           console.error(err);
         });
     }
@@ -276,9 +310,13 @@
       const id = document.getElementById('recordId').value;
       const date = document.getElementById('inputDate').value;
       const mileage = document.getElementById('inputMileage').value;
-      const distance = document.getElementById('inputDistance').value;
-      let brand = document.getElementById('inputBrandSelect').value;
+      
+      let distance = document.getElementById('inputDistanceSelect').value;
+      if (distance === 'อื่น...') {
+        distance = document.getElementById('inputCustomDistance').value;
+      }
 
+      let brand = document.getElementById('inputBrandSelect').value;
       if (brand === 'อื่น...') {
         brand = document.getElementById('inputCustomBrand').value;
       }
@@ -318,7 +356,18 @@
       document.getElementById('recordId').value = item.id;
       document.getElementById('inputDate').value = item.date;
       document.getElementById('inputMileage').value = item.mileage;
-      document.getElementById('inputDistance').value = item.distance;
+
+      const distSelect = document.getElementById('inputDistanceSelect');
+      const standardDistances = ['1000', '2000', '3000', '4000', '5000', '10000'];
+
+      if (standardDistances.includes(String(item.distance))) {
+        distSelect.value = item.distance;
+        checkCustomDistance();
+      } else {
+        distSelect.value = 'อื่น...';
+        checkCustomDistance();
+        document.getElementById('inputCustomDistance').value = item.distance;
+      }
 
       const brandSelect = document.getElementById('inputBrandSelect');
       const standardBrands = ['Castrol', 'Shell', 'PTT', 'Motul', 'Yamalube', 'Honda'];
@@ -350,6 +399,7 @@
       document.getElementById('oilForm').reset();
       document.getElementById('recordId').value = '';
       document.getElementById('inputDate').valueAsDate = new Date();
+      checkCustomDistance();
       checkCustomBrand();
     }
   </script>
